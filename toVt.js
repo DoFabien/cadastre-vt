@@ -10,26 +10,12 @@ const geobuf = require("geobuf");
 const Pbf = require("pbf");
 const cluster = require("cluster");
 
-// const db = new Database("./DB/parcelle.db");
 const getChildrenTiles = require("./getChildrenTiles.js");
 const tilesConfig = JSON.parse(fs.readFileSync(path.join(__dirname, "tileConfig.json"), "utf8"));
-
-// const prepareDb = new Database(Db.prapareDbPath);
-// prepareDb.pragma("journal_mode = WAL");
 
 let dbs = undefined;
 let prepareDb = undefined;
 let dbData = undefined;
-// // const mbtilesFolderPath = Db.mbtilesFolderPath
-// // fs.emptyDirSync(Db.mbtilesFolderPath);
-// // fs.emptyDirSync(Db.dataFolderPath);
-
-// for (let tileConfig of tilesConfig) {
-//   const dbPath = path.join(Db.mbtilesFolderPath, `${tileConfig.name}.mbtiles`);
-//   dbs[tileConfig.name] = new Database(dbPath);
-//   dbs[tileConfig.name].pragma("journal_mode = WAL");
-// }
-
 
 
 
@@ -52,7 +38,8 @@ const getTileVT = (tileIndex, z, x, y, layerName = "main") => {
 
 
 const generateVT = (tileCoords, tileConfig) => {
-
+  const keyFieldToKeep = tileConfig.fields.map( f => f.name)
+  
   if (!tileCoords){
     return;
   }
@@ -65,6 +52,15 @@ const generateVT = (tileCoords, tileConfig) => {
   const features = [];
   for (let d of geobufData) {
     const feature = geobuf.decode(new Pbf(d.data));
+    const props = feature.properties;
+    const filteredProperties = {}
+    for (let key in props){
+      // console.log(key);
+      if ( keyFieldToKeep.includes(key)){
+        filteredProperties[key] = props[key]
+      }
+    }
+    feature.properties = filteredProperties;
     features.push(feature);
   }
 

@@ -70,7 +70,6 @@
         "hashGeom": true,
         "uniqField":"geomhash",
         "fields": [
-            { "name": "object_id", "type": "String", "target": "_id", "functions":["addDep"]},
             { "name": "dur", "type": "Number", "target": "DUR_id", "functions":["toInt"]},
             { "name": "commune_id", "type": "String",  "const": "commune_id", "functions":["addDep"] },
             { "name": "createYear", "type": "Number", "target": "createDate", "functions":["yearFromDate"]},
@@ -82,7 +81,6 @@
         "hashGeom": true,
         "uniqField":"geomhash",
         "fields": [
-            { "name": "object_id", "type": "String", "target": "_id", "functions":["addDep"]},
             { "name": "label", "type": "String", "target": "TEX_id"},
             { "name": "commune_id", "type": "String",  "const": "commune_id", "functions":["addDep"] },
             { "name": "createYear", "type": "Number", "target": "createDate", "functions":["yearFromDate"]},

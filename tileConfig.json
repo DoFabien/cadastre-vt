@@ -1,8 +1,8 @@
 [
     {"name": "commune", "target" : "COMMUNE_id", "minZoom": 7, "maxZoom": 14,"group":"commune",
-        "uniqField":"commune_id",
+        "uniqField":"id",
         "fields": [
-            { "name": "commune_id", "type": "String", "target": "IDU_id", "functions":["addDep"]},
+            { "name": "id", "type": "String", "target": "IDU_id", "functions":["addDep"]},
             { "name": "label", "type": "String", "target": "TEX2_id"},
             { "name": "createYear", "type": "Number", "target": "createDate", "functions":["yearFromDate"]},
             { "name": "updateYear", "type": "Number", "target": "updateDate", "functions":["yearFromDate"]}
@@ -10,28 +10,28 @@
         "dbData": {
             "fields": [
                 { "name": "label", "type": "text" , "target": "label" },
-                { "name": "commune_id", "type": "text" , "target": "commune_id" },
-                { "name": "bbox", "type": "text", "isBbox":true}
+                { "name": "commune_id", "type": "text" , "target": "id" },
+                { "name": "geobuf", "type": "blob", "geobuf": true}
             ],
             "uniqIndex": ["commune_id"]
         }
     },
     {"name": "section","target" : "SECTION_id",  "minZoom": 11, "maxZoom": 16, "group":"cadastre",
-        "uniqField":"section_id",
+        "uniqField":"id",
         "fields": [
-            { "name": "section_id", "type": "String", "target": "IDU_id", "functions":["addDep"]},
-            { "name": "label", "type": "String", "target": "TEX_id"},
+            { "name": "id", "type": "String", "target": "IDU_id", "functions":["addDep"]},
+            { "name": "label", "type": "String", "target": "TEX_id", "functions":["deleteLeft0"] },
             { "name": "commune_id", "type": "String", "const": "commune_id", "functions":["addDep"]},
             { "name": "createYear", "type": "Number", "target": "createDate", "functions":["yearFromDate"]},
             { "name": "updateYear", "type": "Number", "target": "updateDate", "functions":["yearFromDate"]}
         ],
         "dbData": {
             "fields": [
-                { "name": "section_id", "type": "text" , "target": "section_id" },
+                { "name": "section_id", "type": "text" , "target": "id" },
                 { "name": "commune_id", "type": "text" , "target": "commune_id" },
-                { "name": "num_prefix", "type": "text" , "target": "section_id", "function": "getNumPrefixFromParcelleId" },
-                { "name": "num_section", "type": "text" , "target": "section_id", "function": "getNumSectionFromParcelleId" },
-                { "name": "bbox", "type": "text", "isBbox":true}
+                { "name": "num_prefix", "type": "text" , "target": "id", "function": "getNumPrefixFromParcelleId" },
+                { "name": "num_section", "type": "text" , "target": "id", "function": "getNumSectionFromParcelleId" },
+                { "name": "geobuf", "type": "blob", "geobuf": true}
             ],
             "uniqIndex": ["section_id"],
             "indexs": [
@@ -40,9 +40,9 @@
         }
     },
     {"name": "parcelle", "target" : "PARCELLE_id",  "minZoom": 13, "maxZoom": 16,"group":"cadastre",
-        "uniqField":"parcelle_id",
+        "uniqField":"id",
         "fields": [
-            { "name": "parcelle_id", "type": "String", "target": "IDU_id", "functions":["addDep"]},
+            { "name": "id", "type": "String", "target": "IDU_id", "functions":["addDep"]},
             { "name": "superficie", "type": "Number", "target": "SUPF_id", "functions":["toFloat"]},
             { "name": "label", "type": "String", "target": "TEX_id"},
             { "name": "commune_id", "type": "String",  "const": "commune_id", "functions":["addDep"] },
@@ -51,13 +51,13 @@
         ],
         "dbData": {
             "fields": [
-                { "name": "parcelle_id", "type": "text" , "target": "parcelle_id" },
+                { "name": "parcelle_id", "type": "text" , "target": "id" },
                 { "name": "commune_id", "type": "text" , "target": "commune_id" },
-                { "name": "num_prefix", "type": "text" , "target": "parcelle_id", "function": "getNumPrefixFromParcelleId" },
-                { "name": "num_section", "type": "text" , "target": "parcelle_id", "function": "getNumSectionFromParcelleId" },
-                { "name": "num_parcelle", "type": "text" , "target": "parcelle_id", "function": "getNumParcelleFromParcelleId" },
-                
-                { "name": "bbox", "type": "text", "isBbox":true}
+                { "name": "num_prefix", "type": "text" , "target": "id", "function": "getNumPrefixFromParcelleId" },
+                { "name": "num_section", "type": "text" , "target": "id", "function": "getNumSectionFromParcelleId" },
+                { "name": "num_parcelle", "type": "text" , "target": "id", "function": "getNumParcelleFromParcelleId" },
+                { "name": "superficie", "type": "Number" , "target": "superficie" },
+                { "name": "geobuf", "type": "blob", "geobuf": true}
             ],
             "uniqIndex": ["parcelle_id"],
             "indexs": [

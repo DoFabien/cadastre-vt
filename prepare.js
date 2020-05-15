@@ -9,7 +9,6 @@ const walk = require("fs-walk");
 const Db = require('./db.js')
 const geobuf = require('geobuf')
 const Pbf = require('pbf')
-const turf = require("@turf/turf");
 
 
 const tilesConfig = JSON.parse(fs.readFileSync(path.join( __dirname, "./tileConfig.json"), "utf8"));
@@ -20,7 +19,11 @@ const functions = {
     return val.substr(10, 4);
   },
   getNumSectionFromParcelleId: val => {
-    return val.substr(8, 2);
+    let section = val.substr(8, 2)
+    if (section[0] == '0'){
+      section = section[1];
+    }
+    return section;
   },
   getNumPrefixFromParcelleId: val => {
     return val.substr(5, 3);
@@ -90,8 +93,6 @@ const dispatchFeatures = (features,uqField, name,  minZoom) => {
 
 
 const pushAttData = (dbData, tileConfig, features,  ) => {
-
-
   // push to Data db
   if (tileConfig.dbData) {
     let dataToPush = [];
@@ -101,9 +102,9 @@ const pushAttData = (dbData, tileConfig, features,  ) => {
       }
       const vals = {};
       for (let field of tileConfig.dbData.fields) {
-        if (field.isBbox) {
-          const bbox = turf.bbox(feature);
-          vals[field.name] = JSON.stringify(bbox);
+        if (field.geobuf) {
+          const featureBuffer = geobuf.encode(feature.geometry, new Pbf())
+          vals[field.name] = featureBuffer;
         } else {
           let val = feature.properties[field["target"]];
           if (field.function) {
@@ -183,7 +184,7 @@ return new Promise(async (resolve, reject) => {
                 tileConfig.name,
                 tileConfig.minZoom
               );
-                if (withAttData){
+                if (withAttData && dbData){
                   pushAttData(dbData, tileConfig, geojsons[tileConfig.name].features )
                 }
               

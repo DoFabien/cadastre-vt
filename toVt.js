@@ -22,6 +22,8 @@ let dbData = undefined;
 const getTileVT = (tileIndex, z, x, y, layerName = "main") => {
   const layerTiles = {};
   const tileVT = tileIndex.getTile(z, x, y);
+
+
   if (tileVT) {
     const layer = new vtpbf.GeoJSONWrapper(tileVT.features);
     layer.name = layerName;
@@ -77,8 +79,11 @@ const generateVT = (tileCoords, tileConfig) => {
     buffer: 64, // tile buffer on each side
     indexMaxZoom: tileConfig.maxZoom,
     indexMaxPoints: 100000, // max number of points per tile in the index
-    solidChildren: true // whether to include solid tile children in the index
+    solidChildren: true, // whether to include solid tile children in the index,
+    promoteId: tileConfig.promoteId || null
   };
+
+
 
   const tileIndex = geojsonvt(geojson, geojsonVtOptions);
   // const tilesChildren = tileIndex.tileCoords.filter( tc => tc.z >= minZoom && tc.z <= maxZoom);

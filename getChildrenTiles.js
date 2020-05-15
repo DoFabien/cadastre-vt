@@ -1,28 +1,41 @@
-const get4ChildrenTiles = (_tiles) =>{
-    // console.log(_tiles);
-    let tiles = [];
-    for (let tile of _tiles){
-      
-        let xtile, ytile, ztile
-         [ztile, xtile, ytile] = tile;
-        tiles = [ [ztile + 1, xtile * 2, ytile * 2], ...tiles]
-        tiles = [ [ ztile + 1, xtile * 2 + 1, ytile * 2] , ...tiles]
-        tiles = [ [ ztile + 1, xtile * 2 + 1, ytile * 2 + 1], ...tiles]
-        tiles = [ [ztile + 1, xtile * 2, ytile * 2 + 1]  , ...tiles]
-    }
+const get4ChildrenTiles = (tile) => {
+    [ztile, xtile, ytile] = tile;
 
-    return tiles;
+    return [
+        [ztile + 1, xtile * 2, ytile * 2],
+        [ztile + 1, xtile * 2 + 1, ytile * 2],
+        [ztile + 1, xtile * 2 + 1, ytile * 2 + 1],
+        [ztile + 1, xtile * 2, ytile * 2 + 1]
+    ]
 }
 
-const getChildren = ( parentTile, zoomTarget) => {
-    let result = [[...parentTile]]
-    let tiles = [parentTile]
+// z x, y
+const getChildren = (parentTile, zoomTarget) => {
+    const initZoom = parentTile[0];
+    const tileByZoom = {};
 
-    while ( result[0][0] < zoomTarget){
-    tiles = [...get4ChildrenTiles(tiles)]
-    result = [...tiles, ...result]
+    for (let i = initZoom; i<= zoomTarget; i++){
+        tileByZoom[i] = [];
     }
 
+    tileByZoom[initZoom] = [...tileByZoom[initZoom],parentTile ]
+
+    for ( let z in tileByZoom){
+        
+        if (z == zoomTarget ){
+            break
+        }
+        for (let til of tileByZoom[z]){
+            const zint = parseInt(z);
+            tileByZoom[zint + 1] = [...tileByZoom[zint + 1], ...get4ChildrenTiles(til) ]
+            // console.log(til)
+        }
+    }
+    
+    let result = [];
+    for ( let z in tileByZoom){
+        result = [...result, ...tileByZoom[z]] 
+    }
     return result;
 }
 

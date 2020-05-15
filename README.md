@@ -24,13 +24,14 @@ Ce script est le plus long, il :
  4. détermine pour chaque objet, l'appartenance aux tuiles du zoom le plus faible
  5. convertit cette "feature" en format geobuff
  6. stocke cette feature dans une base sqlite ( dans le dossier _prepare_)
- 7. stocke certaines données attributaires ainsi que le bbox (dans le répertoire data -cf : [fichier de config](./tileConfig.json))
+ 7. stocke certaines données attributaires ainsi que la geometry en geobuf (dans le répertoire data -cf : [fichier de config](./tileConfig.json)) (avec le flag --data)
 
 #### 2 : générations des tuiles par "layer" (cadastre-vt-tiles)
 
 ```sh
-cadastre-vt-tiles -p "/data/tiles_2020" -t 16
+cadastre-vt-tiles -p "/data/tiles_2020" -t 16 --data
 ```
+
 
 Génère les tuiles vectorielles par layer en utilisant "geojson-vt".
 Pour chaque layer, un fichier .mbtiles est créé dans le dossier _mbtiles_

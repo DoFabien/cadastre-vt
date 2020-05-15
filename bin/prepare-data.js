@@ -13,6 +13,7 @@ const args = arg({
     '--dep': String,
     '--threads' : Number,
     '--ouput-path': String,
+    '--data': Boolean,
 
     
     // Aliases
@@ -26,10 +27,15 @@ const inputPath =  args['--path']
 const DEP = args['--dep']
 const numWorkers = args['--threads']
 let OUTPUTPATH =  args['--ouput-path']
+const data = args['--data']
 
 
 const prepareDb = Db.createPrepareDb(OUTPUTPATH);
-const dbData = Db.createDataDb(tilesConfig, OUTPUTPATH);
+let dbData =null;
+if (data){
+    dbData = Db.createDataDb(tilesConfig, OUTPUTPATH);
+}
+
 
 console.time('prepare')
 prepare(prepareDb,dbData, inputPath,true, DEP, numWorkers )

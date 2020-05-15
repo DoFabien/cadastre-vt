@@ -56,7 +56,15 @@ const functions = ( DEP) => {
             return null
         }
         return YYYY
-    }
+    },
+    'deleteLeft0' :(val) => {
+        if (val[0] == '0'){
+            return val[1]
+        } else{
+            return val
+        }
+    },
+
    }
    
 }
